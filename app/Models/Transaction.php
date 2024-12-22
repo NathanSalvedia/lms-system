@@ -20,6 +20,14 @@ class Transaction extends Model
         'end_time',
         'return_time',
         'status',
-        'penalty',
     ];
+
+
+    public function user () {
+        return $this->belongsTo(User::class);
+    }
+
+    public function book () {
+        return $this->belongsTo(Book::class);
+    }
 }

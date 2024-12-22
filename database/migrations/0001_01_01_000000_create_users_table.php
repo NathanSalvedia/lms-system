@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('fullname');
             $table->string('course');
             $table->string('department');
-            $table->integer('total_fines')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
