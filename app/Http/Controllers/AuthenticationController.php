@@ -12,16 +12,15 @@ class AuthenticationController extends Controller
 {
     public function login(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'unique_id' => 'required|string',
-            'password' => 'required|string',
+            'password' => 'required',
         ]);
-
-        if (Auth::attempt([
-            'unique_id' => $validatedData['unique_id'], 'password' => $validatedData['password'],
-        ])) {
-            $user = Auth::user();
-
+        $user = User::where("unique_id", $request->unique_id)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid login credentials.'], 401);
+        }
+        $token = $user->createToken($user->fullname);
             return response()->json([
                 'message' => 'Login successful',
                 'user' => [
@@ -29,10 +28,8 @@ class AuthenticationController extends Controller
                     'unique_id' => $user->unique_id,
                     'usertype' => $user->usertype,
                 ],
+                'token' => $token->plainTextToken,
             ], 200);
-        }
-
-        return response()->json(['message' => 'Invalid login credentials.'], 401);
     }
 
 

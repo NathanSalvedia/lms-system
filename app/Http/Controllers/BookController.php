@@ -27,7 +27,7 @@ class BookController extends Controller
             'quantity' => 'required',
             'status' => 'required',
         ]);
-
+        // return $request;
         if ($request->hasFile('image')) {
 
             $fileName = $request->file('image')->getClientOriginalName();
@@ -71,16 +71,16 @@ class BookController extends Controller
         }
 
         $request->validate([
-            'isbn' => 'required',
-            'title' => 'required',
-            'author' => 'required',
-            'edition' => 'required',
-            'publishYear' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'quantity' => 'required',
-            'status' => 'required',
+            "isbn" => "required",
+            "title" => "required",
+            "author" => "required",
+            "edition" => "required",
+            "publishYear" => "required",
+            "image" => "nullable|image|mimes:jpeg,png,jpg",
+            "quantity" => "required",
+            "status" => "required",
         ]);
-
+        // return $request;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
             $book->image = $imagePath;

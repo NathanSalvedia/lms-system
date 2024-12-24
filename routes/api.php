@@ -7,13 +7,9 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthenticationController;
 
-
-
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('/logout', [AuthenticationController::class, 'logout']);
-
-
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
@@ -41,7 +37,6 @@ Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
 
 
 });
-
 
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {

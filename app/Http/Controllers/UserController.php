@@ -19,7 +19,6 @@ class UserController extends Controller
                 'fullname' => 'required|string',
                 'course' => 'required|string',
                 'department' => 'required|string',
-                'total_fines' => 'nullable|integer',
                 'email' => 'required|string|email|unique:users,email',
                 'password' => ['required', 'confirmed'],
             ]);
@@ -33,7 +32,6 @@ class UserController extends Controller
                 'fullname' => $validatedData['fullname'],
                 'course' => $validatedData['course'],
                 'department' => $validatedData['department'],
-                'total_fines' => $validatedData['total_fines'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
             ]);
@@ -75,7 +73,6 @@ class UserController extends Controller
             'fullname' => 'required|string',
             'course' => 'required|string',
             'department' => 'required|string',
-            'total_fines' => 'nullable|integer',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8',
         ]);
@@ -99,7 +96,6 @@ class UserController extends Controller
             'fullname' => 'required|string',
             'course' => 'required|string',
             'department' => 'required|string',
-            'total_fines' => 'nullable|integer',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8',
 
