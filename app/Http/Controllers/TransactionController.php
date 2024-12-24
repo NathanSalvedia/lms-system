@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
-    public function addTransaction(Request $request)
+    public function requestBooks(Request $request)
     {
 
         $validated = $request->validate([
@@ -26,7 +26,6 @@ class TransactionController extends Controller
                     'message' => 'No available copies of this book.',
                 ], 400);
             }
-
 
             $transaction = new Transaction();
             $transaction->user_id = $validated['user_id'];
@@ -52,4 +51,91 @@ class TransactionController extends Controller
             ], 500);
         }
     }
+
+    public function approveRequest($id)
+    {
+        try {
+            // return $id
+            $transaction = Transaction::findOrFail($id);
+
+            if ($transaction->status === 'approved') {
+                return response()->json([
+                    'message' => 'Transaction is already approved.',
+                ], 400);
+            }
+
+            $transaction->status = 'approved';
+            $transaction->save();
+
+            return response()->json([
+                'message' => 'Transaction approved successfully.',
+                'transaction' => $transaction,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to approve transaction.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function returnBook($id)
+    {
+        // return "test"
+        try {
+            $transaction = Transaction::findOrFail($id);
+
+            if ($transaction->status === 'returned') {
+                return response()->json([
+                    'message' => 'This book has already been returned.',
+                ], 400);
+            }
+
+            $transaction->status = 'returned';
+            $transaction->return_time = Carbon::now();
+            $transaction->save();
+
+            $book = Book::findOrFail($transaction->book_id);
+            $book->increment('quantity');
+
+            return response()->json([
+                'message' => 'Book returned successfully.',
+                'transaction' => $transaction,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to return book.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function viewBorrowHistory($id)
+    {
+        // return "test"
+        try {
+            $transactions = Transaction::where('user_id', $id) 
+                ->with('book') 
+                ->orderBy('starting_time', 'desc') 
+                ->get();
+    
+            if ($transactions->isEmpty()) {
+                return response()->json([
+                    'message' => 'No borrow history found for this user.',
+                ], 404);
+            }
+            return response()->json([
+                'message' => 'Borrow history retrieved successfully.',
+                'borrow_history' => $transactions,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve borrow history.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+
+
 }

@@ -28,12 +28,13 @@ Route::put('/book/{id}', [BookController::class, 'update']);
 Route::delete('/book/{id}', [BookController::class, 'destroy']);
 
 
-//Transaction
-Route::post('/add-transaction', [TransactionController::class, 'addTransaction']);
-Route::get('/transaction', [TransactionController::class, 'index']);
-Route::get('/transaction/{id}', [TransactionController::class, 'show']);
-Route::put('/transaction/{id}', [TransactionController::class, 'update']);
-Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
+//transaction request books history
+Route::post('/request-book', [TransactionController::class, 'requestBooks']);
+Route::put('/approve-request/{id}', [TransactionController::class, 'approveRequest']);
+Route::put('/return-book/{id}', [TransactionController::class, 'returnBook']);
+Route::get('/borrow-history/{id}', [TransactionController::class, 'viewBorrowHistory']);
+
+
 
 
 });
